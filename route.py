@@ -146,29 +146,29 @@ def init_db():
     cur.close()
     conn.close()
 
-class User(UserMixin):
-    def __init__(self, id):
-        self.id = id
+# class User(UserMixin):
+#     def __init__(self, id):
+#         self.id = id
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User(user_id)
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User(user_id)
 
-def authorize_request(request):
-    auth_header = request.headers.get('Authorization')
-    if auth_header and auth_header.startswith('Bearer '):
-        token = auth_header.split()[1]
-    else:
-        return jsonify({"error": "Authorization header missing or malformed"}), 401
+# def authorize_request(request):
+#     auth_header = request.headers.get('Authorization')
+#     if auth_header and auth_header.startswith('Bearer '):
+#         token = auth_header.split()[1]
+#     else:
+#         return jsonify({"error": "Authorization header missing or malformed"}), 401
 
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
-    except jwt.ExpiredSignatureError:
-        return jsonify({"error": "Token has expired"}), 401
-    except jwt.InvalidTokenError:
-        return jsonify({"error": "Invalid token"}), 401
+#     try:
+#         payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+#     except jwt.ExpiredSignatureError:
+#         return jsonify({"error": "Token has expired"}), 401
+#     except jwt.InvalidTokenError:
+#         return jsonify({"error": "Invalid token"}), 401
 
-    return None, payload
+#     return None, payload
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -267,6 +267,7 @@ def logout():
 
 class User(UserMixin):
     def __init__(self, id, full_name, email, phone, dob, address, country, gender):
+
         self.id = id
         self.full_name = full_name
         self.email = email
@@ -296,7 +297,6 @@ def load_user(user_id):
                     country=user_data['country'],
                     gender=user_data['gender'])
     return None
-
 
 @app.route('/user_profile/<user_id>', methods=['GET'])
 @login_required
